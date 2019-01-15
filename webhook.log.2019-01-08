@@ -1,7 +1,0 @@
-2019-01-08 12:25:34,740 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%2020 status: 200 text: OK
-2019-01-08 12:25:35,178 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%2030 status: 200 text: OK
-2019-01-08 12:25:35,448 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPH%207 status: 200 text: OK
-2019-01-08 12:25:35,757 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORP%20680 status: 200 text: OK
-2019-01-08 12:25:35,897 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolTemp%203 status: 200 text: OK
-2019-01-08 12:25:36,041 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHkanister%2024800 status: 200 text: OK
-2019-01-08 12:25:36,192 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPkanister%2024700 status: 200 text: OK

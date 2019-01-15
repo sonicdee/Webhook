@@ -1,4 +1,0 @@
-2018-12-20 22:33:03,504 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%2030 status: 200 text: OK
-2018-12-20 22:33:09,790 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%2020 status: 200 text: OK
-2018-12-20 22:34:26,632 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%2099 status: 200 text: OK
-2018-12-20 22:34:31,137 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%2020 status: 200 text: OK
