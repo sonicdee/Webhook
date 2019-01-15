@@ -1,0 +1,16 @@
+2019-01-12 12:13:58,949 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolLight%20an status: 200 text: OK
+2019-01-12 12:14:01,355 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPumpe%20an status: 200 text: OK
+2019-01-12 12:14:02,101 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolWaPumpe%20an status: 200 text: OK
+2019-01-12 12:14:09,802 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%20<function get_cl at 0x000002C6E2AD08C8> status: 200 text: OK
+2019-01-12 12:14:29,937 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%20<function get_cl at 0x000002C6E2AD08C8> status: 200 text: OK
+2019-01-12 12:14:29,975 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%20<function get_ph at 0x000002C6E2AD06A8> status: 200 text: OK
+2019-01-12 12:14:47,311 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%20<function get_cl at 0x000002C6E2AD08C8> status: 200 text: OK
+2019-01-12 12:14:47,341 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%20<function get_ph at 0x000002C6E2AD06A8> status: 200 text: OK
+2019-01-12 12:15:01,068 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%20<function get_cl at 0x000002C6E2AD08C8> status: 200 text: OK
+2019-01-12 12:15:01,072 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%20<function get_ph at 0x000002C6E2AD06A8> status: 200 text: OK
+2019-01-12 12:16:26,327 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%20<function get_cl at 0x000002C6E2AD08C8> status: 200 text: OK
+2019-01-12 12:16:26,392 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%20<function get_ph at 0x000002C6E2AD06A8> status: 200 text: OK
+2019-01-12 12:18:54,120 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%20<function get_cl at 0x000001641B6108C8> status: 200 text: OK
+2019-01-12 12:18:54,121 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%20<function get_ph at 0x000001641B6106A8> status: 200 text: OK
+2019-01-12 12:19:18,627 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%20<function get_cl at 0x000001641B6108C8> status: 200 text: OK
+2019-01-12 12:19:18,634 __main__ DEBUG webhook url: http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%20<function get_ph at 0x000001641B6106A8> status: 200 text: OK
