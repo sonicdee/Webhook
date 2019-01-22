@@ -4,15 +4,15 @@
 """
 #a raspberry pi relais-shield
 
-def sw_mainpump(onoff):
+def set_mainpump(onoff):
     #set on/off!
     print(onoff)
 
 def is_mainpump():
     #>is on/off?
-    return True
+    return False
 
-def sw_heatpump(onoff):
+def set_heatpump(onoff):
     #set on/off!
     print(onoff)
 
@@ -20,7 +20,7 @@ def is_heatpump():
     #>is on/off?
     return True
 
-def sw_light(onoff):
+def set_light(onoff):
     #set on/off!
     print(onoff)
 

@@ -2,7 +2,10 @@
 """
 @author: linus
 """
-#installieren: flask & requests
+#installieren:
+# flask
+# requests
+
 #von fhem aufrufen alle x min:
 #http://127.0.0.1:5000/getsensors
 
@@ -24,6 +27,7 @@
 
 from flask import Flask, request, abort
 import requests
+
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
@@ -31,6 +35,7 @@ from logging.handlers import TimedRotatingFileHandler
 import sensors
 import actors
 import pumps
+import aliveloop
 
 app = Flask(__name__)
 
@@ -71,6 +76,8 @@ def shutdown():
 def getsensors():
     #recieve sensor values from local sensors
     ##>from sensors
+    logger.debug('/getsensors')
+
     ph = sensors.ph()
     orp = sensors.orp()
     temp = sensors.temp()
@@ -96,29 +103,35 @@ def getsensors():
 @app.route('/mainpump', methods=['GET'])
 def mainpump():
     if request.method == 'GET':
+        logger.debug('/mainpump')
+
         state = request.args.get('state', '')
         if state == 'anack':
+            logger.debug('anack -> Pumpe anschalten')
             #->Relais anschalten
-            actors.sw_mainpump(True)
+            actors.set_mainpump(True)
 
             #->Relais angeschaltet?
             actors.is_mainpump
-            print('Pumpe angeschaltet')
+            logger.debug('anack -> Pumpe angeschaltet')
 
             #->Setzte Fhem
             webhook('PoolPumpe','an')
+            logger.debug('an zu Fhem -> Pumpe angeschaltet')
 
             return 'Pumpe angeschaltet'
         elif state == 'auack':
+            logger.debug('auack -> Pumpe ausschalten')
             #->Relais ausschalten
-            actors.sw_mainpump(False)
+            actors.set_mainpump(False)
 
             #->Relais ausgeschalten?
             actors.is_mainpump
-            print("Pumpe ausgeschaltet")
+            logger.debug('auack -> Pumpe ausgeschaltet')
 
             #->Setzte Fhem
             webhook('PoolPumpe','aus')
+            logger.debug('aus zu Fhem -> Pumpe ausgeschaltet')
 
             return 'Pumpe ausgeschaltet'
         return '', 200
@@ -128,29 +141,35 @@ def mainpump():
 @app.route('/heatpump', methods=['GET'])
 def heatpump():
     if request.method == 'GET':
+        logger.debug('/heatpump')
+
         state = request.args.get('state', '')
         if state == 'anack':
+            logger.debug('anack -> WaPumpe anschalten')
             #->Relais anschalten
-            actors.sw_heatpump(True)
+            actors.set_heatpump(True)
 
             #->Relais angeschaltet?
             actors.is_heatpump
-            print('WaermePumpe angeschaltet')
+            logger.debug('anack -> WaPumpe angeschaltet')
 
             #->wenn ja, setzte Fhem
             webhook('PoolWaPumpe','an')
+            logger.debug('an zu Fhem -> WaPumpe angeschaltet')
 
             return 'WaermePumpe ausgeschaltet'
         elif state == 'auack':
+            logger.debug('auack -> WaPumpe ausschalten')
             #->Relais ausschalten
-            actors.sw_heatpump(False)
+            actors.set_heatpump(False)
 
             #->Relais ausgeschalten?
             actors.is_heatpump
-            print("WaermePumpe ausgeschaltet")
+            logger.debug('auack -> WaPumpe ausgeschaltet')
 
             #->wenn ja, setzte Fhem
             webhook('PoolWaPumpe','aus')
+            logger.debug('aus zu Fhem -> Pumpe ausgeschaltet')
 
             return 'WaermePumpe ausgeschaltet'
         return '', 200
@@ -160,29 +179,36 @@ def heatpump():
 @app.route('/light', methods=['GET'])
 def light():
     if request.method == 'GET':
+        logger.debug('/light')
+
         state = request.args.get('state', '')
         if state == 'anack':
+            logger.debug('anack -> Licht anschalten')
             #->Relais anschalten
-            actors.sw_light(True)
+            actors.set_light(True)
 
             #->Relais angeschaltet?
             actors.is_light
-            print('Licht angeschaltet')
+            logger.debug('anack -> Licht angeschaltet')
 
             #->wenn ja, setzte Fhem
             webhook('PoolLight','an')
+            logger.debug('an zu Fhem -> Licht angeschaltet')
 
             return 'Licht ausgeschaltet'
         elif state == 'auack':
             #->Relais ausschalten
-            actors.sw_light(False)
+            logger.debug('auack -> Licht ausschalten')
+            actors.set_light(False)
 
             #->Relais ausgeschalten?
             actors.is_light
-            print("Licht ausgeschaltet")
+            logger.debug('auack -> Licht ausgeschaltet')
 
             #->wenn ja, setzte Fhem
             webhook('PoolLight','aus')
+            logger.debug('aus zu Fhem -> Licht ausgeschaltet')
+
             return 'Licht ausgeschaltet'
         return '', 200
     else:
@@ -191,6 +217,8 @@ def light():
 @app.route('/orpdo', methods=['GET'])
 def orpdo():
     if request.method == 'GET':
+        logger.debug('/orpdo')
+
         do = request.args.get('do:', '')
 
         #send to pump
@@ -210,6 +238,8 @@ def orpdo():
 @app.route('/phdo', methods=['GET'])
 def phdo():
     if request.method == 'GET':
+        logger.debug('/phdo')
+
         do = request.args.get('do:', '')
 
         #send to pump
@@ -229,10 +259,12 @@ def phdo():
 @app.route('/phnewcan', methods=['GET'])
 def phnewcan():
     if request.method == 'GET':
+        logger.debug('/phnewcan')
+
         missing = request.args.get('missing', '')
         #send to pump
         pumps.set_ph_fill(missing)
-        print("PH missing",missing)
+        logger.debug("set PH fill: " + missing)
 
         #get value from pump
         state = pumps.get_ph_fill
@@ -245,10 +277,12 @@ def phnewcan():
 @app.route('/clnewcan', methods=['GET'])
 def clnewcan():
     if request.method == 'GET':
+        logger.debug('/clnewcan')
+
         missing = request.args.get('missing', '')
         #send to pump
         pumps.set_cl_fill(missing)
-        print("CL missing",missing)
+        logger.debug("set CL fill: " + missing)
 
         #get value from pump
         state = pumps.get_cl_fill #>from pump
@@ -271,7 +305,6 @@ def clnewcan():
 #     else:
 #         abort(400)
 
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
-
+    aliveobject = aliveloop.ThreadingAlive
