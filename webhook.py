@@ -308,3 +308,5 @@ def clnewcan():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
     aliveobject = aliveloop.ThreadingAlive
+
+    #todo: beim starten stand and fhem senden !?, bzw. einen Stand annehmen!?

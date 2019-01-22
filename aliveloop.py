@@ -11,10 +11,23 @@ import time
 import datetime
 import requests
 
+import logging
+from logging.handlers import TimedRotatingFileHandler
+
 #my modules
 #import sensors
 import actors
 import pumps
+
+# format the log entries
+formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s')
+handler = TimedRotatingFileHandler('aliveloop.log', 
+                                   when='midnight',
+                                   backupCount=10)
+handler.setFormatter(formatter)
+logger = logging.getLogger(__name__)
+logger.addHandler(handler)
+logger.setLevel(logging.WARNING)
 
 class ThreadingAlive(object):
     """ Threading class
@@ -42,6 +55,8 @@ class ThreadingAlive(object):
             print(' .checking Mainpump')
             if actors.is_mainpump() == False:
                 print("  !! Mainpump is off!! -> stopping PH and CL")
+                logger.warning("!! Mainpump is off!! -> stopping PH and CL")
+
                 pumps.set_cl(0)
                 clnow = pumps.get_cl()
                 print("    CL flow is now:", clnow)
@@ -60,6 +75,8 @@ class ThreadingAlive(object):
                 print("  ..is alive")
             except requests.exceptions.ConnectionError:
                 print("  !! Fhem not reachable -> stopping PH and CL")
+                logger.warning("!! Fhem not reachable -> stopping PH and CL")
+
                 pumps.set_cl(0)
                 clnow = pumps.get_cl()
                 print("    CL flow is now:", clnow)
