@@ -1,3 +1,5 @@
 
 *.pyc
 *.log
+aliveloop.log.*
+pumps.log.*
