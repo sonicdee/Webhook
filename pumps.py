@@ -25,15 +25,21 @@ logger.setLevel(logging.DEBUG)
 ph_can = 25000 #fixed value here
 cl_can = 25000 #fixed value here
 
+debugph = 0
+debugcl = 0
+
 def set_ph(value):
+    global debugph
     logger.debug('set_ph ' + str(value))
     #set ml/min flow value
     print("set_ph: ", str(value))
-
+    debugph = value
+    
 def get_ph():
+    global debugph
     logger.debug('get_ph')
     #get ml/min flow value
-    value = 20
+    value = debugph
     return value
 
 def get_ph_fill():
@@ -53,14 +59,17 @@ def set_ph_fill(value):
     print("set_ph_fill: ", value)
 
 def set_cl(value):
+    global debugcl
     logger.debug('set_cl ' + str(value))
     #set ml/min flow value
     print("set_cl: ", value)
+    debugcl = value
 
 def get_cl():
+    global debugcl
     logger.debug('get_cl')
     #get ml/min flow value
-    value = 20
+    value = debugcl
     return value
 
 def get_cl_fill():

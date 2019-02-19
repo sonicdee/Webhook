@@ -9,15 +9,20 @@
 #EZO ORP: 98 (0x62) (default)
 #EZO RTD: 102 (0x66) (default)
 
+import random
+
 def ph():
     #>from sensor
-    return 7.5
+    ph = random.randint(70,74)/10
+    return ph
 
 def orp():
     #>from sensor
-    return 700
+    orp = random.randint(600,750)
+    return orp
 
 def temp():
     #>from sensor
-    return 3
+    temp = random.randint(17,22)
+    return temp
 
