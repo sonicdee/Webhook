@@ -6,7 +6,7 @@
 # flask
 # requests
 
-#von fhem aufrufen alle x min:
+#von fhem aufrufen alle x min: 192.168.178.103 poolberry
 #http://127.0.0.1:5000/getsensors
 
 #http://127.0.0.1:5000/webhook?arg1=hello&arg2=world
