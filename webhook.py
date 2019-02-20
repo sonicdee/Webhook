@@ -64,6 +64,7 @@ handler.setFormatter(formatter)
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
+#logger.setLevel(logging.warning)
 
 def webhook(device, value):
     url = 'http://192.168.178.25:8087/fhem?cmd.Dummy=set%20' + device + '%20' + str(value)
@@ -101,7 +102,7 @@ def getsensors():
 
     ph_liq = pumps.get_ph_fill()
     cl_liq = pumps.get_cl_fill()
-    
+
     #then send sensor values to fhem
     webhook('PoolPHadd',ph_flow) #trueflow
     webhook('PoolORPadd',cl_flow) #trueflow
@@ -110,7 +111,14 @@ def getsensors():
     webhook('PoolTemp',temp)
     webhook('PoolPHkanister',ph_liq)
     webhook('PoolORPkanister',cl_liq)   
-   
+    
+    #check relais states
+    if actors.is_mainpump() == True:
+        webhook('PoolPumpe','an')
+    elif actors.is_mainpump() == False:
+        webhook('PoolPumpe','aus')
+    #todo: others also: light and wapump
+
     return '', 200
 
 @app.route('/mainpump', methods=['GET'])
@@ -125,20 +133,22 @@ def mainpump():
             actors.set_mainpump(True)
 
             #->Relais angeschaltet?
-            actors.is_mainpump
-            logger.debug('anack -> Pumpe angeschaltet')
-
-            #->Setzte Fhem
-            webhook('PoolPumpe','an')
-            logger.debug('an zu Fhem -> Pumpe angeschaltet')
-
-            return 'Pumpe angeschaltet'
+            if actors.is_mainpump() == True:
+                logger.debug('anack -> Pumpe angeschaltet')
+                #->Setzte Fhem
+                webhook('PoolPumpe','an')
+                logger.debug('an zu Fhem -> Pumpe angeschaltet')
+                return 'Pumpe angeschaltet'
+            elif actors.is_mainpump() == False:
+                logger.warning('anack -> !!! Pumpe anschalten NICHT möglich !')
+                return 'Pumpe anschalten NICHT möglich !!'
         elif state == 'auack':
             logger.debug('auack -> Pumpe ausschalten')
             #->Relais ausschalten
             actors.set_mainpump(False)
 
             #->Relais ausgeschalten?
+            #todo:  if actors.is_mainpump() == False:
             actors.is_mainpump
             logger.debug('auack -> Pumpe ausgeschaltet')
 
@@ -163,6 +173,7 @@ def heatpump():
             actors.set_heatpump(True)
 
             #->Relais angeschaltet?
+            #todo:  if actors.is_heatpump() == True:
             actors.is_heatpump
             logger.debug('anack -> WaPumpe angeschaltet')
 
@@ -177,6 +188,7 @@ def heatpump():
             actors.set_heatpump(False)
 
             #->Relais ausgeschalten?
+            #todo:  if actors.is_heatpump() == False:
             actors.is_heatpump
             logger.debug('auack -> WaPumpe ausgeschaltet')
 
@@ -201,6 +213,7 @@ def light():
             actors.set_light(True)
 
             #->Relais angeschaltet?
+            #todo:  if actors.is_light() == True:
             actors.is_light
             logger.debug('anack -> Licht angeschaltet')
 
@@ -215,6 +228,7 @@ def light():
             actors.set_light(False)
 
             #->Relais ausgeschalten?
+            #todo:  if actors.is_light() == False:
             actors.is_light
             logger.debug('auack -> Licht ausgeschaltet')
 
