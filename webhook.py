@@ -91,7 +91,7 @@ def getsensors():
         webhook('PoolPumpe','an')
     elif actors.is_mainpump() == False:
         webhook('PoolPumpe','aus')
-    #todo: others also: light and wapump
+    #TODO: others also: light and wapump
 
     return '', 200
 
@@ -126,7 +126,7 @@ def mainpump():
             actors.set_mainpump(False)
 
             #->Relais ausgeschalten?
-            #todo:  if actors.is_mainpump() == False:
+            #TODO:  if actors.is_mainpump() == False:
             actors.is_mainpump
             logger.debug('auack -> Pumpe ausgeschaltet')
 
@@ -153,7 +153,7 @@ def heatpump():
             actors.set_heatpump(True)
 
             #->Relais angeschaltet?
-            #todo:  if actors.is_heatpump() == True:
+            #TODO:  if actors.is_heatpump() == True:
             actors.is_heatpump
             logger.debug('anack -> WaPumpe angeschaltet')
 
@@ -168,7 +168,7 @@ def heatpump():
             actors.set_heatpump(False)
 
             #->Relais ausgeschalten?
-            #todo:  if actors.is_heatpump() == False:
+            #TODO:  if actors.is_heatpump() == False:
             actors.is_heatpump
             logger.debug('auack -> WaPumpe ausgeschaltet')
 
@@ -195,7 +195,7 @@ def light():
             actors.set_light(True)
 
             #->Relais angeschaltet?
-            #todo:  if actors.is_light() == True:
+            #TODO:  if actors.is_light() == True:
             actors.is_light
             logger.debug('anack -> Licht angeschaltet')
 
@@ -210,7 +210,7 @@ def light():
             actors.set_light(False)
 
             #->Relais ausgeschalten?
-            #todo:  if actors.is_light() == False:
+            #TODO:  if actors.is_light() == False:
             actors.is_light
             logger.debug('auack -> Licht ausgeschaltet')
 
@@ -233,6 +233,8 @@ def orpdo():
         logger.debug('/orpdo')
 
         do = request.args.get('do:', '')
+
+        #TODO:prüfen ob mainpump an ist, ansonsten setze 0!
 
         #send to pump
         pumps.set_cl(do)
@@ -258,6 +260,8 @@ def phdo():
 
         do = request.args.get('do:', '')
 
+        #TODO: prüfen ob mainpump an ist, ansonsten setze 0!
+        
         #send to pump
         pumps.set_ph(do)
 
@@ -328,4 +332,4 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
     aliveobject = aliveloop.ThreadingAlive
 
-    #todo: beim starten stand and fhem senden !?, bzw. einen Stand annehmen!?
+    #TODO: beim starten stand and fhem senden !?, bzw. einen Stand annehmen!?
