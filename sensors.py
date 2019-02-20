@@ -13,12 +13,12 @@ import random
 
 def ph():
     #>from sensor
-    ph = random.randint(70,74)/10
+    ph = random.randint(72,75)/10
     return ph
 
 def orp():
     #>from sensor
-    orp = random.randint(600,750)
+    orp = random.randint(660,750)
     return orp
 
 def temp():
