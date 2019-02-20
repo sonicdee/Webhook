@@ -6,21 +6,22 @@
 # flask
 # requests
 
-#von fhem aufrufen alle x min: 192.168.178.103 poolberry
+#von fhem aufrufen alle 1 min:
 #http://192.168.178.103:5000/getsensors
-#http://127.0.0.1:5000/getsensors
+#testen http://127.0.0.1:5000/getsensors
 
 #http://127.0.0.1:5000/webhook?arg1=hello&arg2=world
 #http://127.0.0.1:5000/shutdown
 
-#URL und Fhemseitig:
+#URLs und zur Fhemseite:
 #Relais:
 #http://192.168.178.103:5000/mainpump?state=anack auack
-#PoolPumpe von Fhem"curl http://192.168.178.103:5000/mainpump?state=$EVTPART0"
+#PoolPumpe Status von Fhem"curl http://192.168.178.103:5000/mainpump?state=$EVTPART0"
 
 #Pumpe:
-#http://127.0.0.1:5000/phpdo?do:=value 7
-#PoolDosierPumpePH von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"
+#http://192.168.178.103:5000/phdo?do:=77
+#testen http://127.0.0.1:5000/phdo?do:=77
+#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"
 
 #Kansiter füllen (sende 0 gepumpt zu Pumpe):
 #http://192.168.178.103:5000/clnewcan?missing=0
