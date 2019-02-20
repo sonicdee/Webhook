@@ -6,37 +6,7 @@
 # flask
 # requests
 
-#von fhem aufrufen alle 1 min:
-#http://192.168.178.103:5000/getsensors
-#testen http://127.0.0.1:5000/getsensors
-
 #http://127.0.0.1:5000/webhook?arg1=hello&arg2=world
-#http://127.0.0.1:5000/shutdown
-
-#URLs und zur Fhemseite:
-#http://192.168.178.103:5000/mainpump?state=anack anack
-#testen #http://127.0.0.1:5000/mainpump?state=anack
-#PoolPumpe Status von Fhem"curl http://192.168.178.103:5000/mainpump?state=$EVTPART0"
-
-#http://192.168.178.103:5000/heatpump?state=auack auack
-#PoolPumpe Status von Fhem"curl http://192.168.178.103:5000/heatpump?state=$EVTPART0"
-
-#http://192.168.178.103:5000/light?state=anack auack
-#PoolPumpe Status von Fhem"curl http://192.168.178.103:5000/light?state=$EVTPART0"
-
-
-#DosierPumpen:
-#http://192.168.178.103:5000/phdo?do:=77
-#testen http://127.0.0.1:5000/phdo?do:=77
-#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"
-
-#http://192.168.178.103:5000/orpdo?do:=77
-#testen http://127.0.0.1:5000/orpdo?do:=77
-#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"
-
-#Kansiter füllen (dann muss sende: 0 gepumpt zu Pumpe):
-#http://192.168.178.103:5000/clnewcan?missing=0
-#http://192.168.178.103:5000/phnewcan?missing=0
 
 from flask import Flask, request, abort
 import requests
@@ -81,11 +51,15 @@ def shutdown_server():
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
 
+#http://127.0.0.1:5000/shutdown
 @app.route('/shutdown', methods=['GET'])
 def shutdown():
     shutdown_server()
     return 'Server shutting down...'
 
+#von fhem aufrufen alle 1 min:
+#http://192.168.178.103:5000/getsensors
+#testen http://127.0.0.1:5000/getsensors
 @app.route('/getsensors', methods=['GET'])
 def getsensors():
     #recieve sensor values from local sensors
@@ -121,6 +95,10 @@ def getsensors():
 
     return '', 200
 
+#URLs und zur Fhemseite:
+#http://192.168.178.103:5000/mainpump?state=anack anack
+#testen #http://127.0.0.1:5000/mainpump?state=anack
+#PoolPumpe Status von Fhem"curl http://192.168.178.103:5000/mainpump?state=$EVTPART0"
 @app.route('/mainpump', methods=['GET'])
 def mainpump():
     if request.method == 'GET':
@@ -161,6 +139,8 @@ def mainpump():
     else:
         abort(400)
 
+#http://192.168.178.103:5000/heatpump?state=auack auack
+#WärmePumpe Status von Fhem"curl http://192.168.178.103:5000/heatpump?state=$EVTPART0"
 @app.route('/heatpump', methods=['GET'])
 def heatpump():
     if request.method == 'GET':
@@ -201,6 +181,8 @@ def heatpump():
     else:
         abort(400)
 
+#http://192.168.178.103:5000/light?state=anack auack
+#Licht Status von Fhem"curl http://192.168.178.103:5000/light?state=$EVTPART0"
 @app.route('/light', methods=['GET'])
 def light():
     if request.method == 'GET':
@@ -240,7 +222,11 @@ def light():
         return '', 200
     else:
         abort(400)
-        
+
+#DosierPumpen:
+#http://192.168.178.103:5000/phdo?do:=77
+#testen http://127.0.0.1:5000/phdo?do:=77
+#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"        
 @app.route('/orpdo', methods=['GET'])
 def orpdo():
     if request.method == 'GET':
@@ -262,6 +248,9 @@ def orpdo():
     else:
         abort(400)
 
+#http://192.168.178.103:5000/orpdo?do:=77
+#testen http://127.0.0.1:5000/orpdo?do:=77
+#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"
 @app.route('/phdo', methods=['GET'])
 def phdo():
     if request.method == 'GET':
@@ -283,6 +272,9 @@ def phdo():
     else:
         abort(400)
 
+#Kansiter füllen (dann muss sende: 0 gepumpt zu Pumpe):
+#http://192.168.178.103:5000/clnewcan?missing=0
+#http://192.168.178.103:5000/phnewcan?missing=0
 @app.route('/phnewcan', methods=['GET'])
 def phnewcan():
     if request.method == 'GET':
