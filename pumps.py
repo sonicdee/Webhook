@@ -22,14 +22,28 @@ logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
 ##pump can liquids (ml of can)
-ph_can = 25000 #fixed value here
-cl_can = 25000 #fixed value here
+ph_can = 25000.00 #fixed value here
+cl_can = 25000.00 #fixed value here
 
-debugph = 0
-debugcl = 0
+debugph = 0.0
+debugcl = 0.0
+
+debugphfill = 0.0
+debugclfill = 0.0
+
+#fixing values of the pump to a lower flow:
+#my EZO PMP: 105ml/min = 6,3 l/h !
+#Behncke SplashControl = 0,8 l/h -> 13ml/min
+#Bayrohl Automatic     = 1,5 l/h -> 25ml/min
+#Swimtec Dosph basic   = 1,6 l/h -> 26ml/min
+limitflow = 25.0
 
 def set_ph(value):
     global debugph
+
+    if float(value) > limitflow:
+        value = limitflow
+    
     logger.debug('set_ph ' + str(value))
     #set ml/min flow value
     print("set_ph: ", str(value))
@@ -43,10 +57,14 @@ def get_ph():
     return value
 
 def get_ph_fill():
+    global debugph
+    global debugphfill
+
     logger.debug('get_ph_fill')
     # logger.debug('get_ph_fill)
     #get pumped liquds ml from pump
-    ph_pumped = 200 #>from pump
+    debugphfill = float(debugphfill) + float(debugph)
+    ph_pumped = debugphfill #>from pump
 
     return  ph_can - ph_pumped
 
@@ -60,6 +78,10 @@ def set_ph_fill(value):
 
 def set_cl(value):
     global debugcl
+
+    if float(value) > limitflow:
+        value = limitflow
+
     logger.debug('set_cl ' + str(value))
     #set ml/min flow value
     print("set_cl: ", value)
@@ -73,9 +95,12 @@ def get_cl():
     return value
 
 def get_cl_fill():
+    global debugcl
+    global debugclfill
     logger.debug('get_cl_fill')
     #get pumped liquds ml from pump
-    cl_pumped = 300 #>from pump
+    debugclfill = float(debugclfill) + float(debugcl)
+    cl_pumped = debugclfill #>from pump
 
     return  cl_can - cl_pumped
 

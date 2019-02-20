@@ -14,16 +14,27 @@
 #http://127.0.0.1:5000/shutdown
 
 #URLs und zur Fhemseite:
-#Relais:
-#http://192.168.178.103:5000/mainpump?state=anack auack
+#http://192.168.178.103:5000/mainpump?state=anack anack
+#testen #http://127.0.0.1:5000/mainpump?state=anack
 #PoolPumpe Status von Fhem"curl http://192.168.178.103:5000/mainpump?state=$EVTPART0"
 
-#Pumpe:
+#http://192.168.178.103:5000/heatpump?state=auack auack
+#PoolPumpe Status von Fhem"curl http://192.168.178.103:5000/heatpump?state=$EVTPART0"
+
+#http://192.168.178.103:5000/light?state=anack auack
+#PoolPumpe Status von Fhem"curl http://192.168.178.103:5000/light?state=$EVTPART0"
+
+
+#DosierPumpen:
 #http://192.168.178.103:5000/phdo?do:=77
 #testen http://127.0.0.1:5000/phdo?do:=77
 #PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"
 
-#Kansiter füllen (sende 0 gepumpt zu Pumpe):
+#http://192.168.178.103:5000/orpdo?do:=77
+#testen http://127.0.0.1:5000/orpdo?do:=77
+#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"
+
+#Kansiter füllen (dann muss sende: 0 gepumpt zu Pumpe):
 #http://192.168.178.103:5000/clnewcan?missing=0
 #http://192.168.178.103:5000/phnewcan?missing=0
 
@@ -84,13 +95,13 @@ def getsensors():
     orp = sensors.orp()
     temp = sensors.temp()
 
-    ph_liq = pumps.get_ph_fill()
-    cl_liq = pumps.get_cl_fill()
-
     ##pump flow rate
     ph_flow = pumps.get_ph()
     cl_flow = pumps.get_cl()
 
+    ph_liq = pumps.get_ph_fill()
+    cl_liq = pumps.get_cl_fill()
+    
     #then send sensor values to fhem
     webhook('PoolPHadd',ph_flow) #trueflow
     webhook('PoolORPadd',cl_flow) #trueflow

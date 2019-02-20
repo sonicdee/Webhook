@@ -3,14 +3,18 @@
 @author: linus
 """
 #a raspberry pi relais-shield
+debugmainpump = False
 
 def set_mainpump(onoff):
+    global debugmainpump
+    debugmainpump = onoff
     #set on/off!
     print(onoff)
 
 def is_mainpump():
-    #>is on/off?
-    return False
+    global debugmainpump
+    onoff = debugmainpump #>is on/off?
+    return onoff
 
 def set_heatpump(onoff):
     #set on/off!
