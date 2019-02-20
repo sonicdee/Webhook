@@ -130,6 +130,20 @@ def mainpump():
             actors.is_mainpump
             logger.debug('auack -> Pumpe ausgeschaltet')
 
+            #TODO: wenn ausgeschaltet wird !! dann PHflow und CLflow sofort auf 0 schalten:
+            #pumps.set_cl(do)
+            ##get value from pump
+            #current = pumps.get_cl()
+            ##then send back to fhem
+            #webhook('PoolORPadd',str(current))
+                    
+            ##send to pump
+            #pumps.set_ph(do)
+            ##get value from pump
+            #current = pumps.get_ph()
+            ##then send back to fhem
+            #webhook('PoolPHadd',str(current))
+
             #->Setzte Fhem
             webhook('PoolPumpe','aus')
             logger.debug('aus zu Fhem -> Pumpe ausgeschaltet')
