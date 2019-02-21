@@ -130,19 +130,19 @@ def mainpump():
             actors.is_mainpump
             logger.debug('auack -> Pumpe ausgeschaltet')
 
-            #TODO: wenn ausgeschaltet wird !! dann PHflow und CLflow sofort auf 0 schalten:
-            #pumps.set_cl(do)
-            ##get value from pump
-            #current = pumps.get_cl()
-            ##then send back to fhem
-            #webhook('PoolORPadd',str(current))
+            #wenn ausgeschaltet wird !! dann PHflow und CLflow sofort auf 0 schalten:
+            pumps.set_cl(0)
+            #get value from pump
+            current = pumps.get_cl()
+            #then send back to fhem
+            webhook('PoolORPadd',str(current))
                     
-            ##send to pump
-            #pumps.set_ph(do)
-            ##get value from pump
-            #current = pumps.get_ph()
-            ##then send back to fhem
-            #webhook('PoolPHadd',str(current))
+            #send to pumpS
+            pumps.set_ph(0)
+            #get value from pump
+            current = pumps.get_ph()
+            #then send back to fhem
+            webhook('PoolPHadd',str(current))
 
             #->Setzte Fhem
             webhook('PoolPumpe','aus')
@@ -243,6 +243,12 @@ def light():
 #PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"        
 @app.route('/orpdo', methods=['GET'])
 def orpdo():
+      #->Pumpe angeschaltet?
+    if actors.is_mainpump() == False:
+        pumps.set_ph(0)
+        current = pumps.get_ph()
+        webhook('PoolPHadd',str(current))
+        return 'Pumpe ist ausgeschaltet->setzte 0!'
     if request.method == 'GET':
         logger.debug('/orpdo')
 
@@ -269,6 +275,12 @@ def orpdo():
 #PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"
 @app.route('/phdo', methods=['GET'])
 def phdo():
+      #->Pumpe angeschaltet?
+    if actors.is_mainpump() == False:
+        pumps.set_ph(0)
+        current = pumps.get_ph()
+        webhook('PoolPHadd',str(current))
+        return 'Pumpe ist ausgeschaltet->setzte 0!'
     if request.method == 'GET':
         logger.debug('/phdo')
 
