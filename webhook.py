@@ -71,15 +71,15 @@ def getsensors():
     temp = sensors.temp()
 
     ##pump flow rate
-    ph_flow = pumps.get_ph()
-    cl_flow = pumps.get_cl()
+    #ph_flow = pumps.get_ph()
+    #cl_flow = pumps.get_cl()
 
     ph_liq = pumps.get_ph_fill()
     cl_liq = pumps.get_cl_fill()
 
     #then send sensor values to fhem
-    webhook('PoolPHadd',ph_flow) #trueflow
-    webhook('PoolORPadd',cl_flow) #trueflow
+    #webhook('PoolPHadd',ph_flow) #trueflow
+    #webhook('PoolORPadd',cl_flow) #trueflow
     webhook('PoolPH',ph) # set ph first
     webhook('PoolORP',orp) # then orp -> cl is now calculated
     webhook('PoolTemp',temp)
