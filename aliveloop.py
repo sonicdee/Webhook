@@ -71,7 +71,7 @@ class ThreadingAlive(object):
             print(' .checking Fhem')
             url = 'http://192.168.178.25:8087/fhem?cmd.Dummy=set%20' + 'PoolAliveCheck' + '%20' + str(datetime.datetime.now())
             try:
-                requests.get(url,timeout=2)
+                requests.get(url,timeout=7)
                 print("  ..is alive")
             except requests.exceptions.ConnectionError:
                 print("  !! Fhem not reachable -> stopping PH and CL")

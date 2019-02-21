@@ -80,8 +80,8 @@ def getsensors():
     #then send sensor values to fhem
     webhook('PoolPHadd',ph_flow) #trueflow
     webhook('PoolORPadd',cl_flow) #trueflow
-    webhook('PoolPH',ph)
-    webhook('PoolORP',orp)
+    webhook('PoolPH',ph) # set ph first
+    webhook('PoolORP',orp) # then orp -> cl is now calculated
     webhook('PoolTemp',temp)
     webhook('PoolPHkanister',ph_liq)
     webhook('PoolORPkanister',cl_liq)   
@@ -91,7 +91,7 @@ def getsensors():
         webhook('PoolPumpe','an')
     elif actors.is_mainpump() == False:
         webhook('PoolPumpe','aus')
-    #TODO: others also: light and wapump
+    #TODO: check relais states of others also: light and wapump
 
     return '', 200
 
@@ -126,29 +126,33 @@ def mainpump():
             actors.set_mainpump(False)
 
             #->Relais ausgeschalten?
-            #TODO:  if actors.is_mainpump() == False:
-            actors.is_mainpump
-            logger.debug('auack -> Pumpe ausgeschaltet')
+            if actors.is_mainpump() == False:
+                logger.debug('auack -> Pumpe ausgeschaltet')
+                
+                #wenn ausgeschaltet wird !! dann PHflow und CLflow sofort auf 0 schalten:
+                pumps.set_cl(0)
+                #get value from pump
+                current = pumps.get_cl()
+                #then send back to fhem
+                webhook('PoolORPadd',str(current))
+                        
+                #send to pumpS
+                pumps.set_ph(0)
+                #get value from pump
+                current = pumps.get_ph()
+                #then send back to fhem
+                webhook('PoolPHadd',str(current))
 
-            #wenn ausgeschaltet wird !! dann PHflow und CLflow sofort auf 0 schalten:
-            pumps.set_cl(0)
-            #get value from pump
-            current = pumps.get_cl()
-            #then send back to fhem
-            webhook('PoolORPadd',str(current))
-                    
-            #send to pumpS
-            pumps.set_ph(0)
-            #get value from pump
-            current = pumps.get_ph()
-            #then send back to fhem
-            webhook('PoolPHadd',str(current))
+                #->Setzte Fhem
+                webhook('PoolPumpe','aus')
+                logger.debug('aus zu Fhem -> Pumpe ausgeschaltet')
 
-            #->Setzte Fhem
-            webhook('PoolPumpe','aus')
-            logger.debug('aus zu Fhem -> Pumpe ausgeschaltet')
-
-            return 'Pumpe ausgeschaltet'
+                return 'Pumpe ausgeschaltet'
+            elif actors.is_mainpump() == True:
+                logger.warning('auack -> !!! Pumpe ausschalten NICHT möglich !')
+                return 'Pumpe ausschalten NICHT möglich !!'
+        
+            return 'Pumpenfehler'
         return '', 200
     else:
         abort(400)
@@ -254,8 +258,6 @@ def orpdo():
 
         do = request.args.get('do:', '')
 
-        #TODO:prüfen ob mainpump an ist, ansonsten setze 0!
-
         #send to pump
         pumps.set_cl(do)
 
@@ -285,8 +287,6 @@ def phdo():
         logger.debug('/phdo')
 
         do = request.args.get('do:', '')
-
-        #TODO: prüfen ob mainpump an ist, ansonsten setze 0!
         
         #send to pump
         pumps.set_ph(do)
@@ -357,5 +357,3 @@ def clnewcan():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
     aliveobject = aliveloop.ThreadingAlive
-
-    #TODO: beim starten stand and fhem senden !?, bzw. einen Stand annehmen!?
