@@ -72,6 +72,7 @@ def set_ph_fill(value):
     logger.debug('set_ph_fill ' + str(value))
     #set ml filling value
 
+    #TODO: setzten geht nicht im demomode
     #set pump to zero with command:
     #http://127.0.0.1:5000/phnewcan?missing=0
     print("set_ph_fill: ", value)
@@ -107,7 +108,7 @@ def get_cl_fill():
 def set_cl_fill(value):
     logger.debug('set_cl_fill ' + str(value))
     #set ml filling value
-
+    #TODO: setzten geht nicht im demomode
     #set pump to zero with command:
     #http://127.0.0.1:5000/clnewcan?missing=0
     print("set_cl_fill: ", str(value))
