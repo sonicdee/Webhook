@@ -17,10 +17,10 @@ DEVICE_REG_MODE1 = 0x06
 DEVICE_REG_DATA = 0xff
 mainpump_on = [248,250,252,254]
 mainpump_off = [249,251,253,255]
-heatpump_on = [249,252,253]
-heatpump_off = [251,254,255]
-light_on = [249,250,251]
-light_off = [253,254,255]
+heatpump_on = [248,249,252,253]
+heatpump_off = [250,251,254,255]
+light_on = [248,249,250,251]
+light_off = [252,253,254,255]
 
 def set_mainpump(onoff):
     global bus

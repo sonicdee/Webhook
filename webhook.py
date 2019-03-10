@@ -180,30 +180,35 @@ def heatpump():
             actors.set_heatpump(True)
 
             #->Relais angeschaltet?
-            #TODO:  if actors.is_heatpump() == True:
-            actors.is_heatpump
-            logger.debug('anack -> WaPumpe angeschaltet')
-
-            #->wenn ja, setzte Fhem
-            webhook('PoolWaPumpe','an')
-            logger.debug('an zu Fhem -> WaPumpe angeschaltet')
-
-            return 'WaermePumpe ausgeschaltet'
+            if actors.is_heatpump() == True:
+                logger.debug('anack -> WaPumpe angeschaltet')
+                #->Setzte Fhem
+                webhook('PoolWaPumpe','an')
+                logger.debug('an zu Fhem -> WaPumpe angeschaltet')
+                return 'WaPumpe angeschaltet'
+            elif actors.is_mainpump() == False:
+                logger.warning('anack -> !!! WaPumpe anschalten NICHT möglich !')
+                return 'WaPumpe anschalten NICHT möglich !!'
         elif state == 'auack':
             logger.debug('auack -> WaPumpe ausschalten')
             #->Relais ausschalten
             actors.set_heatpump(False)
 
             #->Relais ausgeschalten?
-            #TODO:  if actors.is_heatpump() == False:
-            actors.is_heatpump
-            logger.debug('auack -> WaPumpe ausgeschaltet')
+            if actors.is_heatpump() == False:
+                logger.debug('auack -> Pumpe ausgeschaltet')
 
-            #->wenn ja, setzte Fhem
-            webhook('PoolWaPumpe','aus')
-            logger.debug('aus zu Fhem -> Pumpe ausgeschaltet')
+                #->Setzte Fhem
+                webhook('PoolWaPumpe','aus')
+                logger.debug('aus zu Fhem -> WaPumpe ausgeschaltet')
 
-            return 'WaermePumpe ausgeschaltet'
+                return 'WaPumpe ausgeschaltet'
+            elif actors.is_mainpump() == True:
+                logger.warning('auack -> !!! WaPumpe ausschalten NICHT möglich !')
+                return 'WaPumpe ausschalten NICHT möglich !!'
+        
+            return 'Pumpenfehler'
+
         return '', 200
     else:
         abort(400)
@@ -222,30 +227,34 @@ def light():
             actors.set_light(True)
 
             #->Relais angeschaltet?
-            #TODO:  if actors.is_light() == True:
-            actors.is_light
-            logger.debug('anack -> Licht angeschaltet')
-
-            #->wenn ja, setzte Fhem
-            webhook('PoolLight','an')
-            logger.debug('an zu Fhem -> Licht angeschaltet')
-
-            return 'Licht ausgeschaltet'
+            if actors.is_light() == True:
+                logger.debug('anack -> Licht angeschaltet')
+                #->Setzte Fhem
+                webhook('PoolLight','an')
+                logger.debug('an zu Fhem -> Licht angeschaltet')
+                return 'Licht angeschaltet'
+            elif actors.is_mainpump() == False:
+                logger.warning('anack -> !!! Licht anschalten NICHT möglich !')
+                return 'Licht anschalten NICHT möglich !!'
         elif state == 'auack':
             #->Relais ausschalten
             logger.debug('auack -> Licht ausschalten')
             actors.set_light(False)
 
             #->Relais ausgeschalten?
-            #TODO:  if actors.is_light() == False:
-            actors.is_light
-            logger.debug('auack -> Licht ausgeschaltet')
+            if actors.is_light() == False:
+                logger.debug('auack -> Licht ausgeschaltet')
 
-            #->wenn ja, setzte Fhem
-            webhook('PoolLight','aus')
-            logger.debug('aus zu Fhem -> Licht ausgeschaltet')
+                #->Setzte Fhem
+                webhook('PoolLight','aus')
+                logger.debug('aus zu Fhem -> Licht ausgeschaltet')
 
-            return 'Licht ausgeschaltet'
+                return 'Licht ausgeschaltet'
+            elif actors.is_light() == True:
+                logger.warning('auack -> !!! Licht ausschalten NICHT möglich !')
+                return 'Licht ausschalten NICHT möglich !!'
+        
+            return 'Pumpenfehler'
         return '', 200
     else:
         abort(400)
