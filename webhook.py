@@ -91,7 +91,16 @@ def getsensors():
         webhook('PoolPumpe','an')
     elif actors.is_mainpump() == False:
         webhook('PoolPumpe','aus')
-    #TODO: check relais states of others also: light and wapump
+    
+    if actors.is_heatpump() == True:
+        webhook('PoolWaPumpe','an')
+    elif actors.is_heatpump() == False:
+        webhook('PoolWaPumpe','aus')
+    
+    if actors.is_light() == True:
+        webhook('PoolLight','an')
+    elif actors.is_light() == False:
+        webhook('PoolLight','aus')
 
     return '', 200
 
