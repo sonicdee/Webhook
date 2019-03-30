@@ -161,7 +161,7 @@ def mainpump():
                 logger.warning('auack -> !!! Pumpe ausschalten NICHT möglich !')
                 return 'Pumpe ausschalten NICHT möglich !!'
         
-            return 'Pumpenfehler'
+            return 'Relaisfehler Pumpe'
         return '', 200
     else:
         abort(400)
@@ -207,7 +207,7 @@ def heatpump():
                 logger.warning('auack -> !!! WaPumpe ausschalten NICHT möglich !')
                 return 'WaPumpe ausschalten NICHT möglich !!'
         
-            return 'Pumpenfehler'
+            return 'Relaisfehler WaPumpe'
 
         return '', 200
     else:
@@ -233,7 +233,7 @@ def light():
                 webhook('PoolLight','an')
                 logger.debug('an zu Fhem -> Licht angeschaltet')
                 return 'Licht angeschaltet'
-            elif actors.is_mainpump() == False:
+            elif actors.is_light() == False:
                 logger.warning('anack -> !!! Licht anschalten NICHT möglich !')
                 return 'Licht anschalten NICHT möglich !!'
         elif state == 'auack':
@@ -254,7 +254,53 @@ def light():
                 logger.warning('auack -> !!! Licht ausschalten NICHT möglich !')
                 return 'Licht ausschalten NICHT möglich !!'
         
-            return 'Pumpenfehler'
+            return 'Relaisfehler Licht'
+        return '', 200
+    else:
+        abort(400)
+
+#http://192.168.178.103:5000/ezo?state=anack auack
+#Licht Status von Fhem"curl http://192.168.178.103:5000/ezo?state=$EVTPART0"
+@app.route('/ezo', methods=['GET'])
+def ezo():
+    if request.method == 'GET':
+        logger.debug('/ezo')
+
+        state = request.args.get('state', '')
+        if state == 'anack':
+            logger.debug('anack -> Dosierpumpen anschalten')
+            #->Relais anschalten
+            actors.set_ezo(True)
+
+            #->Relais angeschaltet?
+            if actors.is_ezo() == True:
+                logger.debug('anack -> Dosierpumpen angeschaltet')
+                #->Setzte Fhem
+                webhook('PoolDosing','an')
+                logger.debug('an zu Fhem -> Dosierpumpen angeschaltet')
+                return 'Dosierpumpen angeschaltet'
+            elif actors.is_ezo() == False:
+                logger.warning('anack -> !!! Dosierpumpen anschalten NICHT möglich !')
+                return 'Dosierpumpen anschalten NICHT möglich !!'
+        elif state == 'auack':
+            #->Relais ausschalten
+            logger.debug('auack -> Dosierpumpen ausschalten')
+            actors.set_ezo(False)
+
+            #->Relais ausgeschalten?
+            if actors.is_ezo() == False:
+                logger.debug('auack -> Dosierpumpen ausgeschaltet')
+
+                #->Setzte Fhem
+                webhook('PoolDosing','aus')
+                logger.debug('aus zu Fhem -> Dosierpumpen ausgeschaltet')
+
+                return 'Dosierpumpen ausgeschaltet'
+            elif actors.is_ezo() == True:
+                logger.warning('auack -> !!! Dosierpumpen ausschalten NICHT möglich !')
+                return 'Dosierpumpen ausschalten NICHT möglich !!'
+        
+            return 'Relaisfehler Dosierpumpen'
         return '', 200
     else:
         abort(400)
