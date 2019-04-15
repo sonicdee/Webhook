@@ -102,6 +102,10 @@ def getsensors():
     elif actors.is_light() == False:
         webhook('PoolLight','aus')
 
+    if actors.is_ezo() == True:
+        webhook('PoolDosing','an')
+    elif actors.is_ezo() == False:
+        webhook('PoolDosing','aus')
     return '', 200
 
 #URLs und zur Fhemseite:
@@ -374,10 +378,10 @@ def phnewcan():
     if request.method == 'GET':
         logger.debug('/phnewcan')
 
-        missing = request.args.get('missing', '')
+        #missing = request.args.get('missing', '')
         #send to pump
-        pumps.set_ph_fill(missing)
-        logger.debug("set PH fill: " + missing)
+        pumps.set_ph_fill()
+        logger.debug("set PH fill to zero")
 
         #get value from pump
         state = pumps.get_ph_fill
@@ -392,10 +396,10 @@ def clnewcan():
     if request.method == 'GET':
         logger.debug('/clnewcan')
 
-        missing = request.args.get('missing', '')
+        #missing = request.args.get('missing', '')
         #send to pump
-        pumps.set_cl_fill(missing)
-        logger.debug("set CL fill: " + missing)
+        pumps.set_cl_fill()
+        logger.debug("set CL fill to zero")
 
         #get value from pump
         state = pumps.get_cl_fill #>from pump

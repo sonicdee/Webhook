@@ -9,20 +9,32 @@
 #EZO ORP: 98 (0x62) (default)
 #EZO RTD: 102 (0x66) (default)
 
-import random
+import random #for testing purpose
+
+#atlas scientific code
+from atlas import AtlasI2C
 
 def ph():
     #>from sensor
-    ph = random.randint(72,75)/10
+    phsens = AtlasI2C()
+    phsens.set_i2c_address(99)
+    ph = phsens.query("R")
+    #ph = random.randint(72,75)/10
     return ph
 
 def orp():
     #>from sensor
-    orp = random.randint(660,750)
+    orpsens = AtlasI2C()
+    orpsens.set_i2c_address(98)
+    orp = orpsens.query("R")
+    #orp = random.randint(660,750)
     return orp
 
 def temp():
     #>from sensor
+    # tempsens = AtlasI2C()
+    # tempsens.set_i2c_address(102)
+    # temp = tempsens.query("R")
     temp = random.randint(17,22)
     return temp
 

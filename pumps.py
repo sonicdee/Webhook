@@ -11,6 +11,9 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
+#atlas scientific code
+from atlas import AtlasI2C
+
 # format the log entries
 formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s')
 handler = TimedRotatingFileHandler('pumps.log', 
@@ -39,7 +42,7 @@ debugclfill = 0.0
 limitflow = 25.0
 
 def set_ph(value):
-    global debugph
+    #global debugph
 
     if float(value) > limitflow:
         value = limitflow
@@ -47,38 +50,50 @@ def set_ph(value):
     logger.debug('set_ph ' + str(value))
     #set ml/min flow value
     print("set_ph: ", str(value))
-    debugph = value
-    
+    #debugph = value
+    phpump = AtlasI2C()
+    phpump.set_i2c_address(103)
+    if float(value) == 0:
+        value = phpump.query("X") #stop dispensing
+    else:
+        value = phpump.query("D," + str(value) +",1") #D = fixed volume on 1 minute
 def get_ph():
-    global debugph
-    logger.debug('get_ph')
+    #global debugph
+    #logger.debug('get_ph')
+    
     #get ml/min flow value
-    value = debugph
+    phpump = AtlasI2C()
+    phpump.set_i2c_address(103)
+    value = phpump.query("D,?").split(",")[1] # = ?D,5.00,1
+    #value = debugph
     return value
 
 def get_ph_fill():
-    global debugph
-    global debugphfill
+    #global debugph
+    #global debugphfill
 
     logger.debug('get_ph_fill')
-    # logger.debug('get_ph_fill)
     #get pumped liquds ml from pump
-    debugphfill = float(debugphfill) + float(debugph)
-    ph_pumped = debugphfill #>from pump
+    #debugphfill = float(debugphfill) + float(debugph)
+    #ph_pumped = debugphfill #>from pump
+    phpump = AtlasI2C()
+    phpump.set_i2c_address(103)
+    ph_pumped = phpump.query("TV,?").split(",")[1].split("\x00")[0] #or "ATV,?"
+    return  ph_can - float(ph_pumped)
 
-    return  ph_can - ph_pumped
-
-def set_ph_fill(value):
-    logger.debug('set_ph_fill ' + str(value))
+def set_ph_fill():
+    logger.debug('set_ph_fill to zero')
     #set ml filling value
 
-    #TODO: setzten geht nicht im demomode
     #set pump to zero with command:
     #http://127.0.0.1:5000/phnewcan?missing=0
-    print("set_ph_fill: ", value)
+
+    phpump = AtlasI2C()
+    phpump.set_i2c_address(103)
+    phpump.query("clear")
 
 def set_cl(value):
-    global debugcl
+    #global debugcl
 
     if float(value) > limitflow:
         value = limitflow
@@ -86,29 +101,43 @@ def set_cl(value):
     logger.debug('set_cl ' + str(value))
     #set ml/min flow value
     print("set_cl: ", value)
-    debugcl = value
+    #debugcl = value
+    clpump = AtlasI2C()
+    clpump.set_i2c_address(104)
+    if float(value) == 0:
+        value = clpump.query("X") #stop dispensing
+    else:
+        value = clpump.query("D," + str(value) +",1") #dispense value for 1 minute
 
 def get_cl():
-    global debugcl
-    logger.debug('get_cl')
+    #global debugcl
+    #logger.debug('get_cl')
+    
     #get ml/min flow value
-    value = debugcl
+    clpump = AtlasI2C()
+    clpump.set_i2c_address(104)
+    value = clpump.query("D,?").split(",")[1] # = ?D,5.00,1
+    #value = debugcl
     return value
 
 def get_cl_fill():
-    global debugcl
-    global debugclfill
+    #global debugcl
+    #global debugclfill
     logger.debug('get_cl_fill')
     #get pumped liquds ml from pump
-    debugclfill = float(debugclfill) + float(debugcl)
-    cl_pumped = debugclfill #>from pump
+    #debugclfill = float(debugclfill) + float(debugcl)
+    #cl_pumped = debugclfill #>from pump
+    clpump = AtlasI2C()
+    clpump.set_i2c_address(104)
+    cl_pumped = clpump.query("TV,?").split(",")[1].split("\x00")[0] #or "ATV,?"
+    return  cl_can - float(cl_pumped)
 
-    return  cl_can - cl_pumped
-
-def set_cl_fill(value):
-    logger.debug('set_cl_fill ' + str(value))
+def set_cl_fill():
+    logger.debug('set_cl_fill')
     #set ml filling value
-    #TODO: setzten geht nicht im demomode
+
     #set pump to zero with command:
     #http://127.0.0.1:5000/clnewcan?missing=0
-    print("set_cl_fill: ", str(value))
+    clpump = AtlasI2C()
+    clpump.set_i2c_address(104)
+    clpump.query("clear")
