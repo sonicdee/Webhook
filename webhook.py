@@ -36,6 +36,8 @@ logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 #logger.setLevel(logging.warning)
 
+#actors.init()
+
 def webhook(device, value):
     url = 'http://192.168.178.25:8087/fhem?cmd.Dummy=set%20' + device + '%20' + str(value)
     try:
