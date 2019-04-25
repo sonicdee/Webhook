@@ -25,8 +25,8 @@ logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
 ##pump can liquids (ml of can)
-ph_can = 25000.00 #fixed value here
-cl_can = 25000.00 #fixed value here
+ph_can = 20000.00 #fixed value here
+cl_can = 20000.00 #fixed value here
 
 debugph = 0.0
 debugcl = 0.0
