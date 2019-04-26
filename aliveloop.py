@@ -50,40 +50,40 @@ class ThreadingAlive(object):
         """ Method that runs forever """
         while True:
             #do some work in background
-            print('!Checking state for security reasons, now!')
+            logger.debug('!Checking state for security reasons, now!')
 
             print(' .checking Mainpump')
             if actors.is_mainpump() == False:
-                print("  !! Mainpump is off!! -> stopping PH and CL")
+                logger.debug("  !! Mainpump is off!! -> stopping PH and CL")
                 logger.warning("!! Mainpump is off!! -> stopping PH and CL")
 
                 pumps.set_cl(0)
                 clnow = pumps.get_cl()
-                print("    CL flow is now:", clnow)
+                logger.debug("    CL flow is now: " + clnow)
 
                 pumps.set_ph(0)
                 phnow = pumps.get_ph()
-                print("    PH flow is now:", phnow)
+                logger.debug("    PH flow is now: " + phnow)
             else:
-                print("  ..is on")            
+                logger.debug("  ..is on")            
 
             #check fhem is alive -> commandserver
             print(' .checking Fhem')
-            url = 'http://192.168.178.25:8087/fhem?cmd.Dummy=set%20' + 'PoolAliveCheck' + '%20' + str(datetime.datetime.now())
+            url = 'http://192.168.178.25:8087/fhem?cmd.Dummy=set%20' + 'PoolAliveCheck' + '%20' + str(datetime.datetime.utcnow()+datetime.timedelta(hours=2))
             try:
                 requests.get(url,timeout=7)
-                print("  ..is alive")
+                logger.debug("  ..is alive")
             except requests.exceptions.ConnectionError:
-                print("  !! Fhem not reachable -> stopping PH and CL")
+                logger.debug("  !! Fhem not reachable -> stopping PH and CL")
                 logger.warning("!! Fhem not reachable -> stopping PH and CL")
 
                 pumps.set_cl(0)
                 clnow = pumps.get_cl()
-                print("    CL flow is now:", clnow)
+                logger.debug("    CL flow is now: " + clnow)
 
                 pumps.set_ph(0)
                 phnow = pumps.get_ph()
-                print("    PH flow is now:", phnow)
+                logger.debug("    PH flow is now: " + phnow)
             pass
                
             
