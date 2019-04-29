@@ -28,6 +28,7 @@ handler.setFormatter(formatter)
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
 logger.setLevel(logging.WARNING)
+#logger.setLevel(logging.DEBUG)
 
 class ThreadingAlive(object):
     """ Threading class
@@ -48,6 +49,7 @@ class ThreadingAlive(object):
 
     def run(self):
         """ Method that runs forever """
+        logger.debug('!running forever now!')
         while True:
             #do some work in background
             logger.debug('!Checking state for security reasons, now!')
@@ -68,7 +70,7 @@ class ThreadingAlive(object):
                 logger.debug("  ..is on")            
 
             #check fhem is alive -> commandserver
-            print(' .checking Fhem')
+            logger.debug(" .checking Fhem")
             url = 'http://192.168.178.25:8087/fhem?cmd.Dummy=set%20' + 'PoolAliveCheck' + '%20' + str(datetime.datetime.utcnow()+datetime.timedelta(hours=2))
             try:
                 requests.get(url,timeout=7)
@@ -85,10 +87,8 @@ class ThreadingAlive(object):
                 phnow = pumps.get_ph()
                 logger.debug("    PH flow is now: " + phnow)
             pass
-               
-            
 
-            print('!Check done!')
+            logger.debug("!Check done!")
             time.sleep(self.interval)
 
 aliveobject = ThreadingAlive()
