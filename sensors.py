@@ -20,6 +20,7 @@ def ph():
     phsens.set_i2c_address(99)
     ph = phsens.query("R")
     #ph = random.randint(72,75)/10
+    ph = ph.replace('\x00','')
     return ph
 
 def orp():
@@ -28,6 +29,7 @@ def orp():
     orpsens.set_i2c_address(98)
     orp = orpsens.query("R")
     #orp = random.randint(660,750)
+    orp = orp.replace('\x00','')
     return orp
 
 def temp():
