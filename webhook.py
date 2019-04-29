@@ -34,7 +34,7 @@ handler.setFormatter(formatter)
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
 #logger.setLevel(logging.DEBUG)
-logger.setLevel(logging.warning)
+logger.setLevel(logging.WARNING)
 
 #actors.init()
 
