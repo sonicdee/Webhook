@@ -52,11 +52,11 @@ class ThreadingAlive(object):
         logger.debug('!running forever now!')
         while True:
             #do some work in background
-            logger.debug('!Checking state for security reasons, now!')
+            logger.debug("!Checking state for security reasons, now!")
 
-            print(' .checking Mainpump')
+            logger.debug(" .checking Mainpump")
             if actors.is_mainpump() == False:
-                logger.debug("  !! Mainpump is off!! -> stopping PH and CL")
+                logger.debug("!! Mainpump is off!! -> stopping PH and CL")
                 logger.warning("!! Mainpump is off!! -> stopping PH and CL")
 
                 pumps.set_cl(0)
@@ -76,7 +76,7 @@ class ThreadingAlive(object):
                 requests.get(url,timeout=7)
                 logger.debug("  ..is alive")
             except requests.exceptions.ConnectionError:
-                logger.debug("  !! Fhem not reachable -> stopping PH and CL")
+                logger.debug("!! Fhem not reachable -> stopping PH and CL")
                 logger.warning("!! Fhem not reachable -> stopping PH and CL")
 
                 pumps.set_cl(0)
