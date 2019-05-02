@@ -14,11 +14,13 @@ import requests
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
+import datetime
+
 #my modules
 import sensors
 import actors
 import pumps
-import aliveloop
+#import aliveloop does not work properly
 
 app = Flask(__name__)
 
@@ -88,6 +90,9 @@ def getsensors():
     webhook('PoolPHkanister',ph_liq)
     webhook('PoolORPkanister',cl_liq)   
     
+    #set Checkalive
+    webhook('PoolAliveCheck', str(datetime.datetime.utcnow()+datetime.timedelta(hours=2)))
+
     #check relais states
     if actors.is_mainpump() == True:
         webhook('PoolPumpe','an')
@@ -426,4 +431,4 @@ def clnewcan():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
-    aliveobject = aliveloop.ThreadingAlive
+    #aliveobject = aliveloop.ThreadingAlive

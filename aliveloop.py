@@ -75,7 +75,7 @@ class ThreadingAlive(object):
             try:
                 requests.get(url,timeout=7)
                 logger.debug("  ..is alive")
-            except requests.exceptions.ConnectionError:
+            except Exception:
                 logger.debug("!! Fhem not reachable -> stopping PH and CL")
                 logger.warning("!! Fhem not reachable -> stopping PH and CL")
 
@@ -91,7 +91,12 @@ class ThreadingAlive(object):
             logger.debug("!Check done!")
             time.sleep(self.interval)
 
-aliveobject = ThreadingAlive()
+try:
+    aliveobject = ThreadingAlive()
+except Exception:
+    logger.warning("Main Thread Exception")
+    pass
+
 #time.sleep(3)
 #print('Do some start routine')
 #time.sleep(2)
