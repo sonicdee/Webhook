@@ -84,11 +84,11 @@ def getsensors():
     #then send sensor values to fhem
     #webhook('PoolPHadd',ph_flow) #trueflow
     #webhook('PoolORPadd',cl_flow) #trueflow
-    webhook('PoolPH',ph) # set ph first
-    webhook('PoolORP',orp) # then orp -> cl is now calculated
-    webhook('PoolTemp',temp)
-    webhook('PoolPHkanister',ph_liq)
-    webhook('PoolORPkanister',cl_liq)   
+    webhook('PoolPH',str(ph))  # set ph first
+    webhook('PoolORP',str(orp))  # then orp -> cl is now calculated
+    webhook('PoolTemp',str(temp)) 
+    webhook('PoolPHkanister',str(ph_liq)) 
+    webhook('PoolORPkanister',str(cl_liq))  
     
     #set Checkalive
     webhook('PoolAliveCheck', str(datetime.datetime.utcnow()+datetime.timedelta(hours=2)))
@@ -136,10 +136,10 @@ def mainpump():
                 #->Setzte Fhem
                 webhook('PoolPumpe','an')
                 logger.debug('an zu Fhem -> Pumpe angeschaltet')
-                return 'Pumpe angeschaltet'
+                return 'Pumpe angeschaltet', 200
             elif actors.is_mainpump() == False:
                 logger.warning('anack -> !!! Pumpe anschalten NICHT möglich !')
-                return 'Pumpe anschalten NICHT möglich !!'
+                return 'Pumpe anschalten NICHT möglich !!', 200
         elif state == 'auack':
             logger.debug('auack -> Pumpe ausschalten')
             #->Relais ausschalten
@@ -167,7 +167,7 @@ def mainpump():
                 webhook('PoolPumpe','aus')
                 logger.debug('aus zu Fhem -> Pumpe ausgeschaltet')
 
-                return 'Pumpe ausgeschaltet'
+                return 'Pumpe ausgeschaltet', 200
             elif actors.is_mainpump() == True:
                 logger.warning('auack -> !!! Pumpe ausschalten NICHT möglich !')
                 return 'Pumpe ausschalten NICHT möglich !!'
@@ -175,7 +175,7 @@ def mainpump():
             return 'Relaisfehler Pumpe'
         return '', 200
     else:
-        abort(400)
+        return '', 200
 
 #http://192.168.178.103:5000/heatpump?state=auack auack
 #WärmePumpe Status von Fhem"curl http://192.168.178.103:5000/heatpump?state=$EVTPART0"
@@ -196,7 +196,7 @@ def heatpump():
                 #->Setzte Fhem
                 webhook('PoolWaPumpe','an')
                 logger.debug('an zu Fhem -> WaPumpe angeschaltet')
-                return 'WaPumpe angeschaltet'
+                return 'WaPumpe angeschaltet', 200
             elif actors.is_mainpump() == False:
                 logger.warning('anack -> !!! WaPumpe anschalten NICHT möglich !')
                 return 'WaPumpe anschalten NICHT möglich !!'
@@ -213,7 +213,7 @@ def heatpump():
                 webhook('PoolWaPumpe','aus')
                 logger.debug('aus zu Fhem -> WaPumpe ausgeschaltet')
 
-                return 'WaPumpe ausgeschaltet'
+                return 'WaPumpe ausgeschaltet', 200
             elif actors.is_mainpump() == True:
                 logger.warning('auack -> !!! WaPumpe ausschalten NICHT möglich !')
                 return 'WaPumpe ausschalten NICHT möglich !!'
@@ -222,7 +222,7 @@ def heatpump():
 
         return '', 200
     else:
-        abort(400)
+        return '', 200
 
 #http://192.168.178.103:5000/light?state=anack auack
 #Licht Status von Fhem"curl http://192.168.178.103:5000/light?state=$EVTPART0"
@@ -243,7 +243,7 @@ def light():
                 #->Setzte Fhem
                 webhook('PoolLight','an')
                 logger.debug('an zu Fhem -> Licht angeschaltet')
-                return 'Licht angeschaltet'
+                return 'Licht angeschaltet', 200
             elif actors.is_light() == False:
                 logger.warning('anack -> !!! Licht anschalten NICHT möglich !')
                 return 'Licht anschalten NICHT möglich !!'
@@ -260,7 +260,7 @@ def light():
                 webhook('PoolLight','aus')
                 logger.debug('aus zu Fhem -> Licht ausgeschaltet')
 
-                return 'Licht ausgeschaltet'
+                return 'Licht ausgeschaltet', 200
             elif actors.is_light() == True:
                 logger.warning('auack -> !!! Licht ausschalten NICHT möglich !')
                 return 'Licht ausschalten NICHT möglich !!'
@@ -268,7 +268,7 @@ def light():
             return 'Relaisfehler Licht'
         return '', 200
     else:
-        abort(400)
+        return '', 200
 
 #http://192.168.178.103:5000/ezo?state=anack auack
 #Licht Status von Fhem"curl http://192.168.178.103:5000/ezo?state=$EVTPART0"
@@ -289,7 +289,7 @@ def ezo():
                 #->Setzte Fhem
                 webhook('PoolDosing','an')
                 logger.debug('an zu Fhem -> Dosierpumpen angeschaltet')
-                return 'Dosierpumpen angeschaltet'
+                return 'Dosierpumpen angeschaltet', 200
             elif actors.is_ezo() == False:
                 logger.warning('anack -> !!! Dosierpumpen anschalten NICHT möglich !')
                 return 'Dosierpumpen anschalten NICHT möglich !!'
@@ -306,7 +306,7 @@ def ezo():
                 webhook('PoolDosing','aus')
                 logger.debug('aus zu Fhem -> Dosierpumpen ausgeschaltet')
 
-                return 'Dosierpumpen ausgeschaltet'
+                return 'Dosierpumpen ausgeschaltet', 200
             elif actors.is_ezo() == True:
                 logger.warning('auack -> !!! Dosierpumpen ausschalten NICHT möglich !')
                 return 'Dosierpumpen ausschalten NICHT möglich !!'
@@ -314,7 +314,7 @@ def ezo():
             return 'Relaisfehler Dosierpumpen'
         return '', 200
     else:
-        abort(400)
+        return '', 200
 
 #DosierPumpen:
 #http://192.168.178.103:5000/phdo?do:=77
@@ -327,7 +327,7 @@ def orpdo():
         pumps.set_ph(0)
         current = pumps.get_ph()
         webhook('PoolPHadd',str(current))
-        return 'Pumpe ist ausgeschaltet->setzte 0!'
+        return '', 200
     if request.method == 'GET':
         logger.debug('/orpdo')
 
@@ -345,7 +345,7 @@ def orpdo():
 
         return '', 200
     else:
-        abort(400)
+        return '', 200
 
 #http://192.168.178.103:5000/orpdo?do:=77
 #testen http://127.0.0.1:5000/orpdo?do:=77
@@ -357,7 +357,7 @@ def phdo():
         pumps.set_ph(0)
         current = pumps.get_ph()
         webhook('PoolPHadd',str(current))
-        return 'Pumpe ist ausgeschaltet->setzte 0!'
+        return '', 200
     if request.method == 'GET':
         logger.debug('/phdo')
 
@@ -375,7 +375,7 @@ def phdo():
 
         return '', 200
     else:
-        abort(400)
+        return '', 200
 
 #Kansiter füllen (dann muss sende: 0 gepumpt zu Pumpe):
 #http://192.168.178.103:5000/clnewcan?missing=0
@@ -396,7 +396,7 @@ def phnewcan():
         #return state
         return "PH missing is now: %s" % (str(state)) , 200
     else:
-        abort(400)
+        return '', 200
 
 @app.route('/clnewcan', methods=['GET'])
 def clnewcan():
@@ -414,7 +414,7 @@ def clnewcan():
         #return state
         return "CL missing is now: %s" % (str(state)) , 200
     else:
-        abort(400)
+        return '', 200
 
 # @app.route('/webhook', methods=['GET'])
 # def webhook():
