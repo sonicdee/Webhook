@@ -70,34 +70,34 @@ def getsensors():
     ##>from sensors
     logger.debug('/getsensors')
 
-    ph = sensors.ph()
-    orp = sensors.orp()
-    temp = sensors.temp()
+    #check mainpump, then send values
+    if actors.is_mainpump() == True:
+        webhook('PoolPumpe','an')
 
-    ##pump flow rate
-    #ph_flow = pumps.get_ph()
-    #cl_flow = pumps.get_cl()
+        ph = sensors.ph()
+        orp = sensors.orp()
+        temp = sensors.temp()
 
-    ph_liq = pumps.get_ph_fill()
-    cl_liq = pumps.get_cl_fill()
+        ##pump flow rate
+        #ph_flow = pumps.get_ph()
+        #cl_flow = pumps.get_cl()
 
-    #then send sensor values to fhem
-    #webhook('PoolPHadd',ph_flow) #trueflow
-    #webhook('PoolORPadd',cl_flow) #trueflow
-    webhook('PoolPH',str(ph))  # set ph first
-    webhook('PoolORP',str(orp))  # then orp -> cl is now calculated
-    webhook('PoolTemp',str(temp)) 
-    webhook('PoolPHkanister',str(ph_liq)) 
-    webhook('PoolORPkanister',str(cl_liq))  
+        ph_liq = pumps.get_ph_fill()
+        cl_liq = pumps.get_cl_fill()
+
+        #then send sensor values to fhem
+        #webhook('PoolPHadd',ph_flow) #trueflow
+        #webhook('PoolORPadd',cl_flow) #trueflow
+        webhook('PoolPH',str(ph))  # set ph first
+        webhook('PoolORP',str(orp))  # then orp -> cl is now calculated
+        webhook('PoolTemp',str(temp)) 
+        webhook('PoolPHkanister',str(ph_liq)) 
+        webhook('PoolORPkanister',str(cl_liq))  
+    elif actors.is_mainpump() == False:
+        webhook('PoolPumpe','aus')
     
     #set Checkalive
     webhook('PoolAliveCheck', str(datetime.datetime.utcnow()+datetime.timedelta(hours=2)))
-
-    #check relais states
-    if actors.is_mainpump() == True:
-        webhook('PoolPumpe','an')
-    elif actors.is_mainpump() == False:
-        webhook('PoolPumpe','aus')
     
     if actors.is_heatpump() == True:
         webhook('PoolWaPumpe','an')
