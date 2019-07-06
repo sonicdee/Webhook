@@ -41,7 +41,7 @@ logger.setLevel(logging.WARNING)
 #actors.init()
 
 def webhook(device, value):
-    url = 'http://192.168.178.25:8087/fhem?cmd.Dummy=set%20' + device + '%20' + str(value)
+    url = 'http://192.168.178.91:8087/fhem?cmd.Dummy=set%20' + device + '%20' + str(value)
     try:
         r = requests.get(url,timeout=2)
         logger.debug('webhook url: %s status: %s text: %s', url, r.status_code, r.reason)
@@ -62,7 +62,7 @@ def shutdown():
     return 'Server shutting down...'
 
 #von fhem aufrufen alle 1 min:
-#http://192.168.178.103:5000/getsensors
+#http://192.168.178.88:5000/getsensors
 #testen http://127.0.0.1:5000/getsensors
 @app.route('/getsensors', methods=['GET'])
 def getsensors():
@@ -116,9 +116,9 @@ def getsensors():
     return '', 200
 
 #URLs und zur Fhemseite:
-#http://192.168.178.103:5000/mainpump?state=anack anack
+#http://192.168.178.88:5000/mainpump?state=anack anack
 #testen #http://127.0.0.1:5000/mainpump?state=anack
-#PoolPumpe Status von Fhem"curl http://192.168.178.103:5000/mainpump?state=$EVTPART0"
+#PoolPumpe Status von Fhem"curl http://192.168.178.88:5000/mainpump?state=$EVTPART0"
 @app.route('/mainpump', methods=['GET'])
 def mainpump():
     if request.method == 'GET':
@@ -177,8 +177,8 @@ def mainpump():
     else:
         return '', 200
 
-#http://192.168.178.103:5000/heatpump?state=auack auack
-#WärmePumpe Status von Fhem"curl http://192.168.178.103:5000/heatpump?state=$EVTPART0"
+#http://192.168.178.88:5000/heatpump?state=auack auack
+#WärmePumpe Status von Fhem"curl http://192.168.178.88:5000/heatpump?state=$EVTPART0"
 @app.route('/heatpump', methods=['GET'])
 def heatpump():
     if request.method == 'GET':
@@ -224,8 +224,8 @@ def heatpump():
     else:
         return '', 200
 
-#http://192.168.178.103:5000/light?state=anack auack
-#Licht Status von Fhem"curl http://192.168.178.103:5000/light?state=$EVTPART0"
+#http://192.168.178.88:5000/light?state=anack auack
+#Licht Status von Fhem"curl http://192.168.178.88:5000/light?state=$EVTPART0"
 @app.route('/light', methods=['GET'])
 def light():
     if request.method == 'GET':
@@ -270,8 +270,8 @@ def light():
     else:
         return '', 200
 
-#http://192.168.178.103:5000/ezo?state=anack auack
-#Licht Status von Fhem"curl http://192.168.178.103:5000/ezo?state=$EVTPART0"
+#http://192.168.178.88:5000/ezo?state=anack auack
+#Licht Status von Fhem"curl http://192.168.178.88:5000/ezo?state=$EVTPART0"
 @app.route('/ezo', methods=['GET'])
 def ezo():
     if request.method == 'GET':
@@ -317,9 +317,9 @@ def ezo():
         return '', 200
 
 #DosierPumpen:
-#http://192.168.178.103:5000/phdo?do:=77
+#http://192.168.178.88:5000/phdo?do:=77
 #testen http://127.0.0.1:5000/phdo?do:=77
-#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"        
+#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.88:5000/phdo?$EVTPART0=$EVTPART1"        
 @app.route('/orpdo', methods=['GET'])
 def orpdo():
       #->Pumpe angeschaltet?
@@ -341,15 +341,15 @@ def orpdo():
 
         #then send back to fhem
         webhook('PoolORPadd',str(current))
-        #http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolORPadd%20Wert
+        #http://192.168.178.91:8087/fhem?cmd.Dummy=set%20PoolORPadd%20Wert
 
         return '', 200
     else:
         return '', 200
 
-#http://192.168.178.103:5000/orpdo?do:=77
+#http://192.168.178.88:5000/orpdo?do:=77
 #testen http://127.0.0.1:5000/orpdo?do:=77
-#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.103:5000/phdo?$EVTPART0=$EVTPART1"
+#PoolDosierPumpePH Status von Fhem "curl http://192.168.178.88:5000/phdo?$EVTPART0=$EVTPART1"
 @app.route('/phdo', methods=['GET'])
 def phdo():
       #->Pumpe angeschaltet?
@@ -371,15 +371,15 @@ def phdo():
 
         #then send back to fhem
         webhook('PoolPHadd',str(current))
-        #http://192.168.178.25:8087/fhem?cmd.Dummy=set%20PoolPHadd%20Wert
+        #http://192.168.178.91:8087/fhem?cmd.Dummy=set%20PoolPHadd%20Wert
 
         return '', 200
     else:
         return '', 200
 
 #Kansiter füllen (dann muss sende: 0 gepumpt zu Pumpe):
-#http://192.168.178.103:5000/clnewcan?missing=0
-#http://192.168.178.103:5000/phnewcan?missing=0
+#http://192.168.178.88:5000/clnewcan?missing=0
+#http://192.168.178.88:5000/phnewcan?missing=0
 @app.route('/phnewcan', methods=['GET'])
 def phnewcan():
     if request.method == 'GET':
