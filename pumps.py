@@ -22,7 +22,8 @@ handler = TimedRotatingFileHandler('pumps.log',
 handler.setFormatter(formatter)
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+#logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.CRITICAL)
 
 ##pump can liquids (ml of can)
 ph_can = 20000.00 #fixed value here
