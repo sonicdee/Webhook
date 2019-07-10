@@ -77,7 +77,7 @@ def getsensors():
 
         ph = sensors.ph()
         orp = sensors.orp()
-        temp = sensors.temp()
+        #temp = sensors.temp()
 
         ##pump flow rate
         #ph_flow = pumps.get_ph()
@@ -91,7 +91,7 @@ def getsensors():
         #webhook('PoolORPadd',cl_flow) #trueflow
         webhook('PoolPH',str(ph))  # set ph first
         webhook('PoolORP',str(orp))  # then orp -> cl is now calculated
-        webhook('PoolTemp',str(temp)) 
+        #webhook('PoolTemp',str(temp)) # making temp with cheap jeelink
         webhook('PoolPHkanister',str(ph_liq)) 
         webhook('PoolORPkanister',str(cl_liq))  
     elif actors.is_mainpump() == False:

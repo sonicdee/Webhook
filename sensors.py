@@ -38,5 +38,6 @@ def temp():
     # tempsens.set_i2c_address(102)
     # temp = tempsens.query("R")
     temp = random.randint(17,22)
+    # temp = temp.replace('\x00','')
     return temp
 
